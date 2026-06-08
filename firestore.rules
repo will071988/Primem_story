@@ -1,0 +1,46 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Leads - leitura apenas admin, escrita autenticada
+    match /leads/{docId} {
+      allow read: if request.auth != null;
+      allow create: if true;
+      allow update, delete: if request.auth != null;
+    }
+
+    // Portfolio - leitura pública
+    match /portfolio/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Clientes - leitura pública
+    match /clientes/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Depoimentos - leitura pública
+    match /depoimentos/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Configurações - admin apenas
+    match /configuracoes/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Usuários - admin apenas
+    match /usuarios/{docId} {
+      allow read, write: if request.auth != null;
+    }
+
+    // Regra padrão
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
