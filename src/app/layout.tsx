@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -11,6 +11,12 @@ const inter = Inter({
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
 });
@@ -57,13 +63,13 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${inter.variable} ${playfair.variable} dark h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${spaceGrotesk.variable} dark h-full antialiased`}
     >
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <meta name="theme-color" content="#0A0A0A" />
+        <meta name="theme-color" content="#050505" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#0A0A0A] text-white">
+      <body className="min-h-full flex flex-col bg-[#050505] text-white">
         {children}
         <Toaster position="bottom-right" theme="dark" />
       </body>
