@@ -10,7 +10,7 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "./config";
-import type { Lead, PortfolioItem, Client, Testimonial, Settings } from "@/types";
+import type { Lead, PortfolioItem, Client, Testimonial } from "@/types";
 
 const collections = {
   leads: "leads",

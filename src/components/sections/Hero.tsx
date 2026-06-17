@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AetherScene from "@/components/sections/AetherScene";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -64,6 +65,12 @@ export default function Hero() {
         ref={glowRef}
         className="absolute left-1/2 top-1/2 h-[min(620px,90vw)] w-[min(620px,90vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(192,192,192,0.12),rgba(0,212,255,0.08)_34%,transparent_70%)] blur-[90px] md:blur-[120px]"
       />
+
+      <div className="absolute left-1/2 top-[54%] h-[48vh] min-h-[310px] w-[min(960px,100vw)] -translate-x-1/2 -translate-y-1/2 opacity-85 [mask-image:radial-gradient(ellipse_at_center,black_36%,rgba(0,0,0,0.65)_62%,transparent_84%)]">
+        <AetherScene />
+      </div>
+
+      <div className="absolute left-1/2 top-[54%] h-[40vh] min-h-[260px] w-[min(820px,92vw)] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-white/10 shadow-[0_0_120px_-48px_rgba(0,212,255,0.72)]" />
 
       <nav className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between px-6 md:px-12 lg:px-24 py-6">
         <div className="flex items-center gap-2">

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, MessageCircle, X, Bot, User, Check } from "lucide-react";
+import { Send, MessageCircle, X, Bot, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -66,34 +66,29 @@ export default function ChatFlow() {
     name: "", company: "", segment: "", service: "", objective: "", budget: "", deadline: "",
   });
   const [inputValue, setInputValue] = useState("");
-  const [showOptions, setShowOptions] = useState(false);
   const [finished, setFinished] = useState(false);
   const [saving, setSaving] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentQuestion = questions[currentStep];
+  const showOptions = Boolean(currentQuestion?.options) && !finished;
+
+  const resetConversation = () => {
+    setMessages(initialMessages);
+    setCurrentStep(0);
+    setInputValue("");
+    setFinished(false);
+    setSaving(false);
+    setLeadData({ name: "", company: "", segment: "", service: "", objective: "", budget: "", deadline: "" });
+  };
+
+  const handleOpen = () => {
+    resetConversation();
+    setOpen(true);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  useEffect(() => {
-    if (!open) {
-      setMessages(initialMessages);
-      setCurrentStep(0);
-      setInputValue("");
-      setShowOptions(false);
-      setFinished(false);
-      setLeadData({ name: "", company: "", segment: "", service: "", objective: "", budget: "", deadline: "" });
-    }
-  }, [open]);
-
-  useEffect(() => {
-    if (currentStep < questions.length) {
-      const q = questions[currentStep];
-      if (q.options) {
-        setShowOptions(true);
-      }
-    }
-  }, [currentStep]);
 
   const addBotMessage = (text: string) => {
     setMessages((prev) => [...prev, { type: "bot", text }]);
@@ -107,7 +102,6 @@ export default function ChatFlow() {
     if (!value.trim()) return;
 
     addUserMessage(value);
-    setShowOptions(false);
 
     const q = questions[currentStep];
     setLeadData((prev) => ({ ...prev, [q.field]: value }));
@@ -117,9 +111,6 @@ export default function ChatFlow() {
         const nextQ = questions[currentStep + 1];
         setCurrentStep((prev) => prev + 1);
         addBotMessage(nextQ.question);
-        if (nextQ.options) {
-          setShowOptions(true);
-        }
       }, 600);
     } else {
       setFinished(true);
@@ -168,7 +159,7 @@ export default function ChatFlow() {
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#C0C0C0] text-[#0A0A0A] flex items-center justify-center shadow-2xl hover:bg-white transition-colors group"
       >
         <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform" />
@@ -229,7 +220,7 @@ export default function ChatFlow() {
 
               {showOptions && (
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {questions[currentStep].options?.map((opt) => (
+                  {currentQuestion?.options?.map((opt) => (
                     <button
                       key={opt}
                       onClick={() => handleNext(opt)}
@@ -270,11 +261,11 @@ export default function ChatFlow() {
 
             {!finished && !showOptions && currentStep < questions.length && (
               <div className="p-4 border-t border-white/10">
-                {questions[currentStep]?.isTextarea ? (
+                {currentQuestion?.isTextarea ? (
                   <Textarea
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    placeholder={questions[currentStep]?.placeholder}
+                    placeholder={currentQuestion?.placeholder}
                     className="bg-white/5 border-white/10 text-white resize-none"
                     rows={2}
                   />
@@ -284,7 +275,7 @@ export default function ChatFlow() {
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyDown={handleKeyDown}
-                      placeholder={questions[currentStep]?.placeholder || "Digite sua resposta..."}
+                      placeholder={currentQuestion?.placeholder || "Digite sua resposta..."}
                       className="bg-white/5 border-white/10 text-white"
                     />
                     <button

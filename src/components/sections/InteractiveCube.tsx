@@ -61,7 +61,6 @@ export default function InteractiveCube() {
     const inner = new THREE.Mesh(innerGeo, innerMat);
     group.add(inner);
 
-    const vertexCount = 8;
     const positions = [
       [-1, -1, -1], [1, -1, -1], [1, -1, 1], [-1, -1, 1],
       [-1, 1, -1], [1, 1, -1], [1, 1, 1], [-1, 1, 1],

@@ -22,7 +22,7 @@ export default function ParticleBackground() {
       x: number; y: number; vx: number; vy: number;
       size: number; alpha: number; life: number; maxLife: number;
     }[] = [];
-    const particleCount = 80;
+    const particleCount = window.innerWidth < 768 ? 54 : 96;
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -41,6 +41,20 @@ export default function ParticleBackground() {
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      const gradient = ctx.createRadialGradient(
+        canvas.width * 0.36,
+        canvas.height * 0.18,
+        0,
+        canvas.width * 0.36,
+        canvas.height * 0.18,
+        canvas.width * 0.55
+      );
+      gradient.addColorStop(0, "rgba(0, 212, 255, 0.08)");
+      gradient.addColorStop(0.38, "rgba(108, 43, 255, 0.035)");
+      gradient.addColorStop(1, "rgba(5, 5, 5, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       particles.forEach((p) => {
         p.x += p.vx;
         p.y += p.vy;
@@ -58,10 +72,27 @@ export default function ParticleBackground() {
         const progress = p.life / p.maxLife;
         const alpha = p.alpha * (1 - progress);
 
+        particles.forEach((other) => {
+          const dx = other.x - p.x;
+          const dy = other.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 112) {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.strokeStyle = `rgba(0, 212, 255, ${(1 - dist / 112) * 0.045})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        });
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(192, 192, 192, ${alpha})`;
+        ctx.fillStyle = `rgba(0, 212, 255, ${alpha})`;
+        ctx.shadowBlur = 16;
+        ctx.shadowColor = "rgba(0, 212, 255, 0.7)";
         ctx.fill();
+        ctx.shadowBlur = 0;
       });
 
       animId = requestAnimationFrame(animate);

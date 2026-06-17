@@ -192,6 +192,12 @@
   }
 }
 
+@keyframes float-slow {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(10px, -14px, 0); }
+  66% { transform: translate3d(-8px, 8px, 0); }
+}
+
 .gsap-light-sweep {
   background: linear-gradient(90deg, transparent, rgba(192, 192, 192, 0.26), rgba(0, 212, 255, 0.24), transparent);
 }

@@ -4,24 +4,19 @@ import { useEffect, useState } from "react";
 import { getTestimonials, deleteTestimonial } from "@/firebase/firestore";
 import { Button } from "@/components/ui/button";
 import type { Testimonial } from "@/types";
-import { Plus, Trash2, Star } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminTestimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
 
-  const load = async () => {
-    const data = await getTestimonials();
-    setTestimonials(data);
-  };
-
   useEffect(() => {
-    load();
+    void getTestimonials().then(setTestimonials);
   }, []);
 
   const handleDelete = async (id: string) => {
     if (confirm("Excluir este depoimento?")) {
       await deleteTestimonial(id);
-      load();
+      void getTestimonials().then(setTestimonials);
     }
   };
 

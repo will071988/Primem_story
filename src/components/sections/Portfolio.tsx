@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { X, Play } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -137,12 +136,18 @@ export default function Portfolio() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="relative mx-auto flex min-h-[470px] max-w-6xl items-end justify-center overflow-hidden px-2 [perspective:1100px] sm:px-6">
+          <div className="pointer-events-none absolute inset-x-0 top-10 mx-auto h-56 w-[72%] rounded-full bg-white/5 blur-3xl" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 mx-auto h-44 w-[78%] rounded-full bg-black/50 blur-3xl" />
           {filtered.map((item, index) => (
             <div
               key={index}
               onClick={() => setSelectedVideo(index)}
-              className="group relative aspect-video rounded-2xl overflow-hidden cursor-pointer bg-[#1C1C1C]"
+              className="group absolute bottom-8 h-[320px] w-[min(78vw,500px)] cursor-pointer select-none overflow-hidden rounded-3xl border border-white/10 bg-[#050505] shadow-2xl transition-all duration-500 hover:z-[120] hover:-translate-y-8 hover:scale-105"
+              style={{
+                zIndex: 100 - Math.abs(index - Math.floor(filtered.length / 2)),
+                transform: `translateX(${(index - (filtered.length - 1) / 2) * 92}px) translateZ(${-Math.abs(index - (filtered.length - 1) / 2) * 80}px) rotateY(${-(index - (filtered.length - 1) / 2) * 11}deg)`,
+              }}
             >
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
               <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -157,10 +162,10 @@ export default function Portfolio() {
                 <h3 className="font-heading text-lg mt-1">{item.title}</h3>
                 <p className="text-white/50 text-sm mt-1">{item.description}</p>
               </div>
-              <div className="absolute inset-0 bg-[#1C1C1C] flex items-center justify-center">
-                <span className="text-white/10 font-heading text-6xl">PS</span>
+              <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_50%_42%,rgba(0,212,255,0.18),rgba(108,43,255,0.08)_32%,#050505_72%)]">
+                <span className="font-display text-7xl tracking-[-0.08em] text-white/10">PS</span>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-[#C0C0C0]/0 via-transparent to-transparent group-hover:from-[#C0C0C0]/10 transition-all duration-500" />
+              <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent,rgba(255,255,255,0.12),transparent)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
             </div>
           ))}
         </div>

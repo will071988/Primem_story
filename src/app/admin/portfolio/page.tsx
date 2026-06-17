@@ -9,19 +9,14 @@ import { Plus, Trash2, ExternalLink } from "lucide-react";
 export default function AdminPortfolio() {
   const [items, setItems] = useState<PortfolioItem[]>([]);
 
-  const load = async () => {
-    const data = await getPortfolioItems();
-    setItems(data);
-  };
-
   useEffect(() => {
-    load();
+    void getPortfolioItems().then(setItems);
   }, []);
 
   const handleDelete = async (id: string) => {
     if (confirm("Tem certeza que deseja excluir este item?")) {
       await deletePortfolioItem(id);
-      load();
+      void getPortfolioItems().then(setItems);
     }
   };
 

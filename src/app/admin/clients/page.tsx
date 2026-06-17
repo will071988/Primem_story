@@ -9,19 +9,14 @@ import { Plus, Trash2 } from "lucide-react";
 export default function AdminClients() {
   const [clients, setClients] = useState<Client[]>([]);
 
-  const load = async () => {
-    const data = await getClients();
-    setClients(data);
-  };
-
   useEffect(() => {
-    load();
+    void getClients().then(setClients);
   }, []);
 
   const handleDelete = async (id: string) => {
     if (confirm("Excluir este cliente?")) {
       await deleteClient(id);
-      load();
+      void getClients().then(setClients);
     }
   };
 
